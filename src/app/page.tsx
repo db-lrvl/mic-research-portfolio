@@ -1,69 +1,126 @@
-import Image from "next/image";
+import Link from "next/link";
+import { PageFrame } from "@/components/page-frame";
+import { ProjectCard } from "@/components/project-card";
+import { StatusBadge } from "@/components/status-badge";
+import { academicOutputs } from "@/lib/academic";
+import { learningModules } from "@/lib/foundations";
+import { libraryTopics } from "@/lib/library";
+import { projects } from "@/lib/projects";
+import { site } from "@/lib/site";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <PageFrame>
+      <p className="font-mono text-xs tracking-wide text-muted">
+        {site.programme} · intended entry {site.academicYear}
+      </p>
+      <h1 className="mt-4 max-w-4xl font-serif text-4xl leading-tight text-foreground md:text-6xl">
+        A research portfolio in medical image computing
+      </h1>
+      <div className="mt-6 max-w-3xl space-y-4 text-lg leading-8">
+        <p>
+          {site.authorName ? `${site.authorName} is preparing` : "This site documents preparation"}{" "}
+          for graduate study in medical image computing, moving from professional software
+          engineering into reproducible image analysis.
+        </p>
+        <p>
+          The work follows three stages: foundations, a classical or established baseline, and one
+          narrow research question. Sophisticated models wait until the simpler method is
+          understood and measured.
+        </p>
+      </div>
+      <p className="mt-6 max-w-3xl border border-line bg-paper px-4 py-3 text-sm leading-6">
+        Official programme dates still need to be confirmed on the University of Girona site.
+        Everything experimental on this portfolio is educational. It is not clinical software.
+      </p>
+
+      <section className="mt-14">
+        <div className="flex items-end justify-between gap-4">
+          <h2 className="font-serif text-3xl">Research projects</h2>
+          <Link href="/research" className="text-sm text-accent underline underline-offset-4">
+            All projects
+          </Link>
+        </div>
+        <div className="mt-6 grid gap-4 lg:grid-cols-3">
+          {projects.map((project) => (
+            <ProjectCard key={project.slug} project={project} />
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-14 grid gap-10 border-t border-line pt-10 md:grid-cols-2">
+        <div>
+          <h2 className="font-serif text-3xl">Scientific library</h2>
+          <p className="mt-3 max-w-xl leading-7">
+            {libraryTopics.length} topic categories are in place, grouped by foundational subjects,
+            MIC specializations, and the three projects. Papers will be added one verified record
+            at a time.
           </p>
+          <p className="mt-3 text-sm text-muted">Published papers: 0</p>
+          <Link href="/library" className="mt-4 inline-block text-sm text-accent underline underline-offset-4">
+            Browse topics
+          </Link>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div>
+          <h2 className="font-serif text-3xl">Academic production</h2>
+          <ul className="mt-3 space-y-3">
+            {academicOutputs.slice(0, 3).map((output) => (
+              <li key={output.title} className="flex items-start justify-between gap-3">
+                <span>{output.title}</span>
+                <StatusBadge status={output.status} />
+              </li>
+            ))}
+          </ul>
+          <Link href="/academic" className="mt-4 inline-block text-sm text-accent underline underline-offset-4">
+            Planned outputs
+          </Link>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <section className="mt-14 border-t border-line pt-10">
+        <h2 className="font-serif text-3xl">Learning foundations</h2>
+        <p className="mt-3 max-w-3xl leading-7">
+          Modules follow the preparatory subjects for the first year of medical image analysis.
+          Status records whether the work has started. There is no score and no progress bar.
+        </p>
+        <ul className="mt-6 grid gap-3 md:grid-cols-2">
+          {learningModules.map((module) => (
+            <li key={module.slug}>
+              <Link
+                href={`/foundations/${module.slug}`}
+                className="flex items-center justify-between gap-3 border border-line bg-paper px-4 py-3 hover:border-accent"
+              >
+                <span>{module.title}</span>
+                <StatusBadge status={module.status} />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="mt-14 border-t border-line pt-10">
+        <h2 className="font-serif text-3xl">Profiles</h2>
+        <ul className="mt-3 space-y-2">
+          <li>
+            {site.githubUrl ? (
+              <a href={site.githubUrl} className="text-accent underline underline-offset-4">
+                GitHub
+              </a>
+            ) : (
+              "GitHub profile not configured."
+            )}
+          </li>
+          <li>
+            {site.linkedinUrl ? (
+              <a href={site.linkedinUrl} className="text-accent underline underline-offset-4">
+                Professional profile
+              </a>
+            ) : (
+              "Professional profile not configured."
+            )}
+          </li>
+        </ul>
+      </section>
+    </PageFrame>
   );
 }
